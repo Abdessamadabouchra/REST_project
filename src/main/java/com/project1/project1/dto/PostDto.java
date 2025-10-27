@@ -1,4 +1,4 @@
 package com.project1.project1.dto;
 
-public class UserDao {
+public class PostDto {
 }
