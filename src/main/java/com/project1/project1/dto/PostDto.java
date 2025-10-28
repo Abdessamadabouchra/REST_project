@@ -26,6 +26,11 @@ public class PostDto {
 
     @NotNull
     private Integer ownerId;
+    private String ownerTitle;
+    private String ownerFirstName;
+    private String ownerLastName;
+    private String ownerPicture;
+
 
     public String getText() {
         return text;
@@ -82,4 +87,29 @@ public class PostDto {
     public void setOwnerId(Integer ownerId) {
         this.ownerId = ownerId;
     }
+    public String getOwnerTitle() {
+        return ownerTitle;
+    }
+    public void setOwnerTitle(String ownerTitle) {
+        this.ownerTitle = ownerTitle;
+    }
+    public String getOwnerFirstName() {
+        return ownerFirstName;
+    }
+    public void setOwnerFirstName(String ownerFirstName) {
+        this.ownerFirstName = ownerFirstName;
+    }
+    public String getOwnerLastName() {
+        return ownerLastName;
+    }
+    public void setOwnerLastName(String ownerLastName) {
+        this.ownerLastName = ownerLastName;
+    }
+    public String getOwnerPicture() {
+        return ownerPicture;
+    }
+    public void setOwnerPicture(String ownerPicture) {
+        this.ownerPicture = ownerPicture;
+    }
+
 }
