@@ -1,10 +1,6 @@
 package com.project1.project1.model;
 
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.URL;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,14 +10,10 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
-    @Size(min=6,max=1000)
     private String text;
-    @URL(message = "Image must be a valid URL")
     private String image;
-    private int likes=0;
-    @Size(min=6,max=600)
+    private int likes = 0;
     private String link;
-
 
     @ElementCollection
     private List<String> tags;

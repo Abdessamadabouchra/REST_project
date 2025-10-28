@@ -1,26 +1,33 @@
 package com.project1.project1.model;
 
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+
+import java.time.LocalDate;
 
 @Entity
 public class Comment {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
-    @Size(min=2,max=500,message = "the message should be between 2 and 500 charachter")
+    @JoinColumn(name = "user_id")
+    private User owner;
+
     private String message;
 
     @ManyToOne
-    @JoinColumn(name="post_id")
+    @JoinColumn(name = "post_id")
     private Post post;
 
 
+    private LocalDate publishedDate;
+    @ManyToOne
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
+
+public Comment(){}
     public int getId() {
         return id;
     }
@@ -30,11 +37,11 @@ public class Comment {
     }
 
     public User getUser() {
-        return user;
+        return owner;
     }
 
     public void setUser(User user) {
-        this.user = user;
+        this.owner = user;
     }
 
     public String getMessage() {
@@ -51,5 +58,11 @@ public class Comment {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+    public void setPublishedDate() {
+    this.publishedDate = LocalDate.now();
+    }
+    public LocalDate getPublishedDate() {
+    return publishedDate;
     }
 }
