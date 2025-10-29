@@ -17,15 +17,23 @@ public class User {
     private String lastName;
     private String email;
     private LocalDate dateOfBirth;
-    private LocalDate registerDate;
+    //@Column(nullable = false, columnDefinition = "DATE DEFAULT CURRENT_DATE")
+    private LocalDate registerDate = LocalDate.now();
     private String phone;
     private String picture;
     @Embedded
     private Location location;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.registerDate == null) {
+            this.registerDate = LocalDate.now();
+        }
+    }
+
     public User() {}
 
-    public User(Title title, String firstName, String lastName, String email, LocalDate dateOfBirth,  String phone, String picture, Location location) {
+    public User(Title title, String firstName, String lastName, String email, LocalDate dateOfBirth , String phone, String picture, Location location) {
         this.title = title;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -33,6 +41,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.phone = phone;
         this.picture = picture;
+        this.registerDate=LocalDate.now();
         this.location = location;
     }
 

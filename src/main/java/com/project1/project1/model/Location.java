@@ -19,6 +19,17 @@ public class Location {
     private String timezone;
 
 
+    public Location() {}
+
+    public  Location(String street, String city, String state, String country, String timezone) {
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.timezone = timezone;
+    }
+
+
     public String getStreet() { return street; }
     public void setStreet(String street) { this.street = street; }
 
