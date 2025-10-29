@@ -4,7 +4,6 @@ import com.project1.project1.dto.CommentDto;
 import com.project1.project1.model.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 
