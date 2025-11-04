@@ -1,25 +1,31 @@
 package com.project1.project1.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
-public class PostPreviewDto {
-    private Long id;
+import jakarta.validation.constraints.Size;
+
+public class PostFullDto {
+
+    private Integer id;
     private String text;
     private String image;
     private int likes;
     private List<String> tags;
-    private LocalDateTime publishDate;
+      @Size(min = 6, max = 600)
+    private String link;
+    private LocalDate publishDate;
     private UserPreviewDto owner;
-    public Long getId() {
+    public Integer getId() {
         return id;
-    }
-    public void setId(Long id) {
+    }   
+    public void setId(Integer id) {
         this.id = id;
     }
+
     public String getText() {
         return text;
-    }
+    }                   
     public void setText(String text) {
         this.text = text;
     }
@@ -41,10 +47,10 @@ public class PostPreviewDto {
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
-    public LocalDateTime getPublishDate() {
+    public LocalDate getPublishDate() {
         return publishDate;
     }
-    public void setPublishDate(LocalDateTime publishDate) {
+    public void setPublishDate(LocalDate publishDate) {
         this.publishDate = publishDate;
     }
     public UserPreviewDto getOwner() {
@@ -53,5 +59,9 @@ public class PostPreviewDto {
     public void setOwner(UserPreviewDto owner) {
         this.owner = owner;
     }
+    public String getLink() {
+        return link;
+    }
+    
 
 }

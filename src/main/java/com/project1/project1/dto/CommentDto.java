@@ -9,7 +9,8 @@ public class CommentDto {
 
     private int id;
     @NotNull(message = "User ID is mandatory")
-    private Integer userId;
+
+    private UserPreviewDto owner;
 
     @NotNull(message = "Post ID is mandatory")
     private Integer postId;
@@ -28,12 +29,11 @@ public class CommentDto {
         return id;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public UserPreviewDto getOwner() {
+        return owner;
     }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setOwner(UserPreviewDto owner) {
+        this.owner = owner;
     }
 
     public Integer getPostId() {

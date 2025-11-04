@@ -23,9 +23,6 @@ public class Comment {
 
 
     private LocalDate publishedDate;
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
 
 public Comment(){}
     public int getId() {

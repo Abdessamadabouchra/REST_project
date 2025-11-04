@@ -2,6 +2,7 @@ package com.project1.project1.dto;
 
 public class UserPreviewDto {
     private String id;
+    private String title;
     private String firstName;
     private String lastName;
     private String picture;
@@ -10,6 +11,12 @@ public class UserPreviewDto {
     }
     public void setId(String id) {
         this.id = id;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
     public String getFirstName() {
         return firstName;
