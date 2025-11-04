@@ -33,12 +33,11 @@ public Comment(){}
         this.id = id;
     }
 
-    public User getUser() {
+    public User getOwner() {
         return owner;
     }
-
-    public void setUser(User user) {
-        this.owner = user;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public String getMessage() {

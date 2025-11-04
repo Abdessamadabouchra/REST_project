@@ -16,10 +16,11 @@ public interface CommentMapper {
 
     @Mapping(target="owner",source="owner", qualifiedByName = "mapOwnerIdToUser")
     @Mapping(target="post",source="post", qualifiedByName = "mapPostIdToPost")
+    @Mapping(target="id", ignore = true)
     Comment toEntity(CommentCreateDto dto);
 
     @Mapping(target="owner",source="owner")
-    @Mapping(target="postId",source="post")
+    @Mapping(target="postId",source="post.id")
     CommentDto toDto(Comment comment);
 
 
