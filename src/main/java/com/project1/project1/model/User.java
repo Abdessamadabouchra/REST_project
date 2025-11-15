@@ -3,13 +3,14 @@ package com.project1.project1.model;
 import com.project1.project1.enums.Title;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 public class User {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     private Title title;
@@ -24,12 +25,6 @@ public class User {
     @Embedded
     private Location location;
 
-    @PrePersist
-    public void prePersist() {
-        if (this.registerDate == null) {
-            this.registerDate = LocalDate.now();
-        }
-    }
 
     public User() {}
 
@@ -45,11 +40,11 @@ public class User {
         this.location = location;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

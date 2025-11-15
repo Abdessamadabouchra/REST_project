@@ -1,0 +1,37 @@
+INSERT INTO user (id,date_of_birth,
+                  city,
+                  country,
+                  email,
+                  first_name,
+                  last_name,
+                  phone,
+                  picture,
+                  state,
+                  street,
+                  timezone,
+                  title)
+VALUES (UUID(),'2023-03-22',
+        'Agadir',
+        'Morocco',
+        'ettakyabeljalil@gmail.com',
+        'Abdeljalil',
+        'ET-taky','0656822656','https://google.com/pic1','Souss Masa','Street rahma','+1:00', 'MR');
+
+
+INSERT INTO Post (id,text, image, link, owner_id,likes)
+VALUES
+    (
+        '1','Tutoriel complet sur MapStruct et les DTOs en Spring Boot.',
+        'http://exemple.com/map_struct_tuto.png',
+        'http://tuto.com/mapstruct',
+        '1',
+     45
+    );
+
+
+
+INSERT INTO Post_tags (Post_id, tags) VALUES (1, 'java');
+
+INSERT INTO Comment (id,user_id, post_id, message)
+VALUES
+    (UUID(),'3eb267a9-c1c1-11f0-bf8b-1062e54fa939','1aa17187-c1c2-11f0-bf8b-1062e54fa939','Comment 1 de user 1 sur post 1');

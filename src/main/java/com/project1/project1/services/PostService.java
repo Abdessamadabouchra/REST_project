@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;  
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class PostService {
     @Autowired
@@ -15,7 +17,7 @@ public class PostService {
         return userDao.findAll();
     }
 
-    public Optional<User> getUserById(Integer id) {
+    public Optional<User> getUserById(UUID id) {
         return userDao.findById(id);
     }
 
@@ -23,7 +25,7 @@ public class PostService {
         return userDao.save(user);
     }
 
-    public void deleteUser(Integer id) {
+    public void deleteUser(UUID id) {
         userDao.deleteById(id);
     }
 }

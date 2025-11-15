@@ -3,13 +3,14 @@ package com.project1.project1.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class Post {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String text;
     private String image;
     private int likes = 0;
@@ -18,7 +19,7 @@ public class Post {
     @ElementCollection
     private List<String> tags;
 
-    private LocalDate publishDate;
+    private LocalDate publishDate=LocalDate.now();
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
@@ -26,21 +27,20 @@ public class Post {
 
     public Post() {}
 
-    public Post(String text, String image, int likes, String link, List<String> tags, LocalDate publishDate, User owner) {
+    public Post(String text, String image, int likes, String link, List<String> tags, User owner) {
         this.text = text;
         this.image = image;
         this.likes = likes;
         this.link = link;
         this.tags = tags;
-        this.publishDate = publishDate;
         this.owner = owner;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

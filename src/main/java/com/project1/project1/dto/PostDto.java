@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public class PostDto {
 
@@ -25,7 +26,7 @@ public class PostDto {
     private LocalDate publishDate;
 
     @NotNull
-    private Integer ownerId;
+    private UUID ownerId;
     private String ownerTitle;
     private String ownerFirstName;
     private String ownerLastName;
@@ -80,11 +81,11 @@ public class PostDto {
         this.publishDate = publishDate;
     }
 
-    public Integer getOwnerId() {
+    public UUID getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(Integer ownerId) {
+    public void setOwnerId(UUID ownerId) {
         this.ownerId = ownerId;
     }
     public String getOwnerTitle() {

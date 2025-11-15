@@ -4,15 +4,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class CommentDto {
 
-    private int id;
+    private UUID id;
     @NotNull(message = "User ID is mandatory")
-    private Integer userId;
+    private UUID userId;
 
     @NotNull(message = "Post ID is mandatory")
-    private Integer postId;
+    private UUID postId;
 
     @Size(min = 2, max = 500, message = "the message should be between 2 and 500 charachter")
     @NotNull(message = "The message field cannot be null")
@@ -20,27 +21,27 @@ public class CommentDto {
     private LocalDate publishedDate;
 
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public Integer getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
-    public Integer getPostId() {
+    public UUID getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(UUID postId) {
         this.postId = postId;
     }
 

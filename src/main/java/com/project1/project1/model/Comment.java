@@ -3,13 +3,14 @@ package com.project1.project1.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy=GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -21,18 +22,16 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    private LocalDate publishedDate=LocalDate.now();
 
-    private LocalDate publishedDate;
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+
 
 public Comment(){}
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

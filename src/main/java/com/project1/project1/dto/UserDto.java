@@ -7,10 +7,12 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;
 
+import java.util.UUID;
+
 
 public class UserDto {
 
-    private int id;
+    private UUID id;
     private Title title;
 
     @Size(min = 2,max = 50,message = "First name should be between 2 and 50 character")
@@ -26,6 +28,13 @@ public class UserDto {
     private String picture;
 
     private Location location;
+
+    public UUID getId() {
+        return id;
+    }
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public Title getTitle() {
         return title;
