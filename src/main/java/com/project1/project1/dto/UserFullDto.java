@@ -5,12 +5,15 @@ import com.project1.project1.model.Location;
 
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
+
 import org.hibernate.validator.constraints.URL;
 
 import java.util.UUID;
 
 
-public class UserDto {
+public class UserFullDto {
 
     private UUID id;
     private Title title;
@@ -22,7 +25,10 @@ public class UserDto {
     @Size(min = 2,max = 50,message = "Last name should be between 2 and 50 character")
     @NotNull
     private String lastName;
-
+   private String email;
+    private LocalDate dateOfBirth;
+    private LocalDate registerDate;
+    private String phone;
 
     @URL(message = "Picture must be a valid URL")
     private String picture;
@@ -75,5 +81,35 @@ public class UserDto {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+    public LocalDate getRegisterDate() {
+        return registerDate;
+    }
+    public void setRegisterDate(LocalDate registerDate) {
+        this.registerDate = registerDate;
+    }
+    public String getPhone() {
+        return phone;
+    }
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
