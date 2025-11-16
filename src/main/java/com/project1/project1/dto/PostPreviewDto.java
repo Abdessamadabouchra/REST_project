@@ -2,19 +2,20 @@ package com.project1.project1.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public class PostPreviewDto {
-    private Long id;
+    private UUID id;
     private String text;
     private String image;
     private int likes;
     private List<String> tags;
     private LocalDateTime publishDate;
     private UserPreviewDto owner;
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
     public String getText() {

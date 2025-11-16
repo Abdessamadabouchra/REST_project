@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 import java.util.List;
+import java.util.UUID;
 
 public class PostCreateDto {
 
@@ -18,7 +19,7 @@ public class PostCreateDto {
 
     private List<String> tags;
 
-    private int owner;
+    private UUID owner;
 
 
     public String getText() {
@@ -52,10 +53,10 @@ public class PostCreateDto {
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
-    public int getOwner() {
+    public UUID getOwner() {
         return owner;
     }       
-    public void setOwner(int owner) {
+    public void setOwner(UUID owner) {
         this.owner = owner;
     }
     

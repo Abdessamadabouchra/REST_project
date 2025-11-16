@@ -2,12 +2,13 @@ package com.project1.project1.dto;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.validation.constraints.Size;
 
 public class PostFullDto {
 
-    private Integer id;
+    private UUID id;
     private String text;
     private String image;
     private int likes;
@@ -16,10 +17,10 @@ public class PostFullDto {
     private String link;
     private LocalDate publishDate;
     private UserPreviewDto owner;
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }   
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

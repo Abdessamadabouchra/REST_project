@@ -1,9 +1,11 @@
 package com.project1.project1.dto;
 
+import java.util.UUID;
+
 public class CommentCreateDto {
     private String message;
-    private int owner;
-    private int post;
+    private UUID owner;
+    private UUID post;
 
     public String getMessage() {
         return message;
@@ -13,16 +15,16 @@ public class CommentCreateDto {
         this.message = message;
     }
 
-    public int getOwner() {
+    public UUID getOwner() {
         return owner;
     }
-    public void setOwner(int owner) {
+    public void setOwner(UUID owner) {
         this.owner = owner;
     }
-    public int getPost() {
+    public UUID getPost() {
         return post;
     }
-    public void setPost(int post) {
+    public void setPost(UUID post) {
         this.post = post;
     }
 

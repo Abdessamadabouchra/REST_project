@@ -7,6 +7,7 @@ import com.project1.project1.model.Post;
 import com.project1.project1.model.User;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,7 +24,7 @@ public interface PostMapper {
     @Mapping(source = "owner", target = "owner" , qualifiedByName = "mapOwnerIdToUser")
     Post toEntity(PostCreateDto dto);
     @Named("mapOwnerIdToUser")
-    default User mapOwnerIdToUser(int ownerId) {
+    default User mapOwnerIdToUser(UUID ownerId) {
         User user = new User();
         user.setId(ownerId);
         return user;

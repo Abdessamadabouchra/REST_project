@@ -22,7 +22,7 @@ public class CommentService {
     private CommentMapper commentMapper;
 
     public ListResponseDto<CommentDto> getAllComments(Pageable pagable) {
-        Page<CommentDto> CommentPage= commentDao.findAll(pagable).map(commentMapper::commentToCommentDto);
+        Page<CommentDto> CommentPage= commentDao.findAll(pagable).map(commentMapper::toDto);
 
         return new ListResponseDto<>(CommentPage);
     }

@@ -10,6 +10,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.UUID;
+
 @Mapper(componentModel = "spring",uses=UserMapper.class)
 
 public interface CommentMapper {
@@ -19,19 +21,19 @@ public interface CommentMapper {
     @Mapping(target="id", ignore = true)
     Comment toEntity(CommentCreateDto dto);
 
-    @Mapping(target="owner",source="owner")
+    @Mapping(target="userId",source="owner.id")
     @Mapping(target="postId",source="post.id")
     CommentDto toDto(Comment comment);
 
 
     @Named("mapOwnerIdToUser")
-    default User mapOwnerIdToUser(int ownerId) {
+    default User mapOwnerIdToUser(UUID ownerId) {
         User user = new User();
         user.setId(ownerId);
         return user;
     }
      @Named("mapPostIdToPost")
-    default Post mapPostIdToPost(int postId) {
+    default Post mapPostIdToPost(UUID postId) {
         Post post = new Post();
         post.setId(postId);
         return post;

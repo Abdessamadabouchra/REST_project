@@ -35,11 +35,11 @@ public Comment(){}
         this.id = id;
     }
 
-    public User getUser() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setUser(User user) {
+    public void setOwner(User user) {
         this.owner = user;
     }
 

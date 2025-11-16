@@ -1,15 +1,17 @@
 package com.project1.project1.dto;
 
+import java.util.UUID;
+
 public class UserPreviewDto {
-    private String id;
+    private UUID id;
     private String title;
     private String firstName;
     private String lastName;
     private String picture;
-    public String getId() {
+    public UUID getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
     public String getTitle() {
