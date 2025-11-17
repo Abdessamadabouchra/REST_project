@@ -9,7 +9,6 @@ target/
 *.war
 *.iml
 .idea/
-application.properties
 
 ### STS ###
 .apt_generated
