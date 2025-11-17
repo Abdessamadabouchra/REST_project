@@ -10,19 +10,21 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/v1/users")
 public class UserController{
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/Users")
+
+    @GetMapping
     public List<User> GetUsers(){
         return userService.getAllUsers();
     }
 
 
-    @PostMapping("/Users/add")
-    public User CreateUser(@RequestBody User user){
+    @PostMapping
+        public User CreateUser(@RequestBody User user){
        return userService.CreateUser(user);
     }
 
