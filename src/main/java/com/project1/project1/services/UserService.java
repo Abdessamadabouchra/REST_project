@@ -9,12 +9,9 @@ import com.project1.project1.exception.ResourceNotFoundException;
 import com.project1.project1.model.User;
 import com.project1.project1.repository.UserDao;
 import com.project1.project1.specification.UserSpecification;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +51,16 @@ public class UserService {
 
     public UserFullDto updateUser(UUID id, UserFullDto userdto) {
         User us=userDao.findById(id).orElseThrow(()-> new ResourceNotFoundException("No user found!"));
+        if(userdto.getFirstName()!=null & userdto.getLastName()!=null & userdto.getEmail()!=null){
+           if(userdto.getEmail()!=us.getEmail()){
+               throw new BodyNotValidException("You can not modify the email!");
+           }
             userMapper.updateUserFromDto(userdto,us);
             us=userDao.save(us);
-            return userMapper.toFullDto(us);
+        }else {
+            throw new BodyNotValidException("First name ,Last name and email address are required!");
+        }
+        return userMapper.toFullDto(us);
     }
 
     public UUID deleteUser(UUID id) {

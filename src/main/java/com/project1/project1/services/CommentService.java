@@ -3,11 +3,15 @@ import com.project1.project1.dto.CommentDto;
 import com.project1.project1.dto.ListResponseDto;
 import com.project1.project1.dto.mappers.CommentMapper;
 import com.project1.project1.model.Comment;
-import com.project1.project1.repository.CommentDao;  
+import com.project1.project1.repository.CommentDao;
+import com.project1.project1.specification.CommentSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
     
 import java.util.Optional;
@@ -21,8 +25,9 @@ public class CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
-    public ListResponseDto<CommentDto> getAllComments(Pageable pagable) {
-        Page<CommentDto> CommentPage= commentDao.findAll(pagable).map(commentMapper::toDto);
+    public ListResponseDto<CommentDto> getAllComments(String message, LocalDate startDate,LocalDate endDate,Pageable pagable) {
+        Specification<Comment> spec= CommentSpecification.filter(message,startDate,endDate);
+        Page<CommentDto> CommentPage= commentDao.findAll(spec,pagable).map(commentMapper::toDto);
 
         return new ListResponseDto<>(CommentPage);
     }
