@@ -9,6 +9,7 @@ import com.project1.project1.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +32,10 @@ public class PostController {
             @RequestParam(required = false) String text,
             @RequestParam(required = false) Integer minLikes,
             @RequestParam(required = false) Integer maxLikes,
-            @RequestParam(required = false) LocalDate publishDateAfter,
-            @RequestParam(required = false) LocalDate publishDateBefore,
+            @RequestParam(required = false) 
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateAfter,
+            @RequestParam(required = false) 
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateBefore,
             @PageableDefault(
                     page = 0,
                     size = 10,
@@ -60,8 +63,10 @@ public class PostController {
             @RequestParam(required = false) String text,
             @RequestParam(required = false) Integer minLikes,
             @RequestParam(required = false) Integer maxLikes,
-            @RequestParam(required = false) LocalDate publishDateAfter,
-            @RequestParam(required = false) LocalDate publishDateBefore,
+            @RequestParam(required = false) 
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateAfter,
+            @RequestParam(required = false) 
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateBefore,
             @PageableDefault(
                     page = 0,
                     size = 10,
@@ -81,8 +86,10 @@ public class PostController {
             @RequestParam(required = false) String text,
             @RequestParam(required = false) Integer minLikes,
             @RequestParam(required = false) Integer maxLikes,
-            @RequestParam(required = false) LocalDate publishDateAfter,
-            @RequestParam(required = false) LocalDate publishDateBefore,
+            @RequestParam(required = false) 
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateAfter,
+            @RequestParam(required = false) 
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateBefore,
             @PageableDefault(
                     page = 0,
                     size = 10,
