@@ -3,7 +3,6 @@ package com.project1.project1.controller;
 import com.project1.project1.dto.ListResponseDto;
 import com.project1.project1.dto.UserFullDto;
 import com.project1.project1.dto.UserPreviewDto;
-import com.project1.project1.model.User;
 import com.project1.project1.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +21,7 @@ public class UserController{
     private UserService userService;
 
     @GetMapping
-    public ListResponseDto<UserPreviewDto> GetUsers(@RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "10") int size,
+    public ListResponseDto<UserPreviewDto> GetUsers(
                                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDateOfBirth,
                                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDateOfBirth,
                                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startRegisterDate,
@@ -32,11 +30,9 @@ public class UserController{
                                                     @RequestParam(required = false) String state,
                                                     @RequestParam(required = false) String city,
                                                     @RequestParam(required = false) String timezone,
-                                                    @PageableDefault(sort = "registerDate", direction = Sort.Direction.DESC) Pageable pageable
+                                                    @PageableDefault(sort = "registerDate", direction = Sort.Direction.DESC,size=10) Pageable pageable
     ){
-
-
-        return userService.getAllUsers(page,size,startDateOfBirth,endDateOfBirth,startRegisterDate,endRegisterDate,country,state,city,timezone,pageable);
+        return userService.getAllUsers(startDateOfBirth,endDateOfBirth,startRegisterDate,endRegisterDate,country,state,city,timezone,pageable);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +41,7 @@ public class UserController{
     }
 
     @PostMapping
-        public User CreateUser(@RequestBody User user){
+        public UserFullDto CreateUser(@RequestBody UserFullDto user){
        return userService.CreateUser(user);
     }
 
@@ -55,7 +51,7 @@ public class UserController{
     }
 
     @DeleteMapping("/{id}")
-    public UserFullDto deleteUser(@PathVariable UUID id){
+    public UUID deleteUser(@PathVariable UUID id){
        return  userService.deleteUser(id);
     }
 

@@ -20,7 +20,8 @@ public class CommentController {
 
     @Autowired
     CommentService commentService;
- @GetMapping("/Comments")
+
+ @GetMapping("/v1/comments")
     public ListResponseDto<CommentDto> getComments(@PageableDefault(sort={"publishedDate"}) Pageable pageable) {
      return commentService.getAllComments(pageable);
  }

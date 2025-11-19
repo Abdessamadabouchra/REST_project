@@ -17,5 +17,6 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
+
     void updateUserFromDto(UserFullDto dto, @MappingTarget User user);
 }
