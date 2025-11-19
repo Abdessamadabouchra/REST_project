@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 // import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
@@ -41,6 +42,6 @@ public interface PostMapper {
     // Mapping liste
     List<PostPreviewDto> toDtoList(List<Post> posts);
     List<PostFullDto> toResponseDtoList(List<Post> posts);
-
-    // PostDto updatePostDto(PostDto postPreviewDto,@MappingTarget Post post);
+  
+     void updatePostDto(PostFullDto postFullDto,@MappingTarget Post post);
 }
