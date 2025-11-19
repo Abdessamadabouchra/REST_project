@@ -1,8 +1,8 @@
-package com.project1.project1.specification;
+// package com.project1.project1.specification;
 
-public class CommentSpecification {
+// // public class CommentSpecification {
 
-    public static filter(){
+// //     public static filter(){
 
-    }
-}
+// //     }
+// // }

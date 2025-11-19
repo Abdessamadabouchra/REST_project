@@ -9,11 +9,13 @@ import com.project1.project1.model.User;
 import java.util.List;
 import java.util.UUID;
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 // import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring",uses=UserMapper.class)
 public interface PostMapper {
@@ -42,6 +44,10 @@ public interface PostMapper {
     // Mapping liste
     List<PostPreviewDto> toDtoList(List<Post> posts);
     List<PostFullDto> toResponseDtoList(List<Post> posts);
-  
+    
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "owner", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "publishDate", ignore = true)
      void updatePostDto(PostFullDto postFullDto,@MappingTarget Post post);
 }
