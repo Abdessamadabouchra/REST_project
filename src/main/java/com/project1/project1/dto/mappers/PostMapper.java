@@ -44,7 +44,7 @@ public interface PostMapper {
     // Mapping liste
     List<PostPreviewDto> toDtoList(List<Post> posts);
     List<PostFullDto> toResponseDtoList(List<Post> posts);
-    
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "owner", ignore = true)
     @Mapping(target = "id", ignore = true)
