@@ -17,6 +17,8 @@ public class PostFullDto {
     private String link;
     private LocalDate publishDate;
     private UserPreviewDto owner;
+
+    
     public UUID getId() {
         return id;
     }   

@@ -28,7 +28,10 @@ protected ResponseEntity<Object> handleNoHandlerFoundException(
     }
 
 
-
+ @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<String> handleInvalidOp(InvalidOperationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 
 
     @ExceptionHandler(ParamsNotValidException.class)
