@@ -119,7 +119,7 @@ public ListResponseDto<PostPreviewDto> getPostsByTag(
 
         // Transforme DTO en entity
         Post post = postMapper.toEntity(postCreateDto);
-       
+       post.setOwner(owner);
         // Génère le link automatiquement
     String slug = postCreateDto.getText()
                     .toLowerCase()

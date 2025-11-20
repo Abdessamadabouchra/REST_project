@@ -1,6 +1,6 @@
 package com.project1.project1.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,7 +10,7 @@ public class PostPreviewDto {
     private String image;
     private int likes;
     private List<String> tags;
-    private LocalDateTime publishDate;
+    private LocalDate  publishDate;
     private UserPreviewDto owner;
     public UUID getId() {
         return id;
@@ -42,10 +42,10 @@ public class PostPreviewDto {
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
-    public LocalDateTime getPublishDate() {
+    public LocalDate  getPublishDate() {
         return publishDate;
     }
-    public void setPublishDate(LocalDateTime publishDate) {
+    public void setPublishDate(LocalDate  publishDate) {
         this.publishDate = publishDate;
     }
     public UserPreviewDto getOwner() {
