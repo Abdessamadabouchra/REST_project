@@ -44,7 +44,7 @@ public class PostService {
         Specification<Post> spec = PostSpecifications.filter(
                  text, minLikes, maxLikes, publishDateAfter, publishDateBefore
         );
-
+        System.out.println(">>> SERVICE METHOD CALLED");
         Page<PostPreviewDto> dtoPage =
                 postDao.findAll(spec, pageable).map(postMapper::toPreviewDto);
 
