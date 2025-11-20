@@ -15,10 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-
-
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -52,7 +49,7 @@ public class UserService {
     public UserFullDto updateUser(UUID id, UserFullDto userdto) {
         User us=userDao.findById(id).orElseThrow(()-> new ResourceNotFoundException("No user found!"));
         if(userdto.getFirstName()!=null & userdto.getLastName()!=null & userdto.getEmail()!=null){
-           if(userdto.getEmail()!=us.getEmail()){
+           if(userdto.getEmail().equals(us.getEmail())){
                throw new BodyNotValidException("You can not modify the email!");
            }
             userMapper.updateUserFromDto(userdto,us);

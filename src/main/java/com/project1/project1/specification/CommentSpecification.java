@@ -7,15 +7,13 @@ import org.springframework.data.jpa.domain.Specification;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CommentSpecification {
 
-    public static Specification<Comment> filter(String message, LocalDate startDate, LocalDate endDate){
+    public static Specification<Comment> filter(LocalDate startDate, LocalDate endDate){
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (message != null) {
-                predicates.add(cb.equal(root.get("message"), message));
-            }
             if(startDate != null){
                 predicates.add(cb.greaterThanOrEqualTo(root.get("publishDate"), startDate));
             }
@@ -25,4 +23,12 @@ public class CommentSpecification {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
-}
+
+    public static Specification<Comment> byPost(UUID postId) {
+        return (root, query, cb) -> {
+            if (postId == null) {
+                return null;
+            }
+            return cb.equal(root.get("post").get("id"), postId);
+        };
+}}
