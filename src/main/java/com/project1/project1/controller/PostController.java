@@ -10,12 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/v1/posts")
@@ -27,24 +31,40 @@ public class PostController {
     // ================================
     //        GET ALL POSTS
     // ================================
-    @GetMapping
-    public ListResponseDto<PostPreviewDto> getAllPosts(
-            @RequestParam(required = false) String text,
-            @RequestParam(required = false) Integer minLikes,
-            @RequestParam(required = false) Integer maxLikes,
-            @RequestParam(required = false) 
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateAfter,
-            @RequestParam(required = false) 
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateBefore,
-            @PageableDefault(
-                    page = 0,
-                    size = 10,
-                    sort = "publishDate",
-                    direction = Sort.Direction.DESC
-            ) Pageable pageable
-    ) {
-        return postService.getAllPosts(text, minLikes, maxLikes, publishDateAfter, publishDateBefore, pageable);
+    @GetMapping()
+public ResponseEntity<ListResponseDto<PostPreviewDto>> getAllPosts(
+        @RequestParam(required = false) String text,
+        @RequestParam(required = false) Integer minLikes,
+        @RequestParam(required = false) Integer maxLikes,
+        @RequestParam(required = false) 
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateAfter,
+        @RequestParam(required = false) 
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateBefore,
+        @PageableDefault(
+                page = 0,
+                size = 10,
+                sort = "publishDate",
+                direction = Sort.Direction.DESC
+        ) Pageable pageable,
+        @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch
+) {
+    ListResponseDto<PostPreviewDto> posts = postService.getAllPosts(text, minLikes, maxLikes, publishDateAfter, publishDateBefore, pageable);
+
+    // Générer un ETag basé sur le hash de la réponse
+    String eTag = Integer.toString(posts.hashCode());
+
+    // Vérifier si l'ETag du client correspond
+    if (ifNoneMatch != null && ifNoneMatch.equals(eTag)) {
+        return ResponseEntity.status(HttpStatus.NOT_MODIFIED)
+                             .eTag(eTag)
+                             .build();
     }
+
+    return ResponseEntity.ok()
+            .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
+            .eTag(eTag)
+            .body(posts);
+}
 
     // ================================
     //        GET POST BY ID
