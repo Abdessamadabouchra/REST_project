@@ -80,7 +80,7 @@ public class PostController {
     // ================================
     //        GET POSTS BY TAG
     // ================================
-    @GetMapping("/tag")
+    @GetMapping("/tags")
     public ListResponseDto<PostPreviewDto> getPostsByTag(
             @RequestParam List<String> tags,
             @RequestParam(required = false) String text,

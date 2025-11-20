@@ -96,10 +96,6 @@ public ListResponseDto<PostPreviewDto> getPostsByTag(
         LocalDate publishDateBefore,
         Pageable pageable
 ) {
-    if (tags== null || tags.isEmpty()) {
-        throw new IllegalArgumentException("Tag value must not be null or empty");
-    }
-
     // Combine le filtrage par tag + autres filtres facultatifs
   Specification<Post> spec = PostSpecifications.byTags(tags)
         .and(PostSpecifications.filter(
@@ -119,7 +115,7 @@ public ListResponseDto<PostPreviewDto> getPostsByTag(
 
         // Transforme DTO en entity
         Post post = postMapper.toEntity(postCreateDto);
-       post.setOwner(owner);
+       //post.setOwner(owner);
         // Génère le link automatiquement
     String slug = postCreateDto.getText()
                     .toLowerCase()
@@ -141,7 +137,7 @@ public ListResponseDto<PostPreviewDto> getPostsByTag(
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
 
         // Ne pas autoriser la mise à jour de l'owner
-        if (postUpdateDto.getOwner() != null && !postUpdateDto.getOwner().equals(post.getOwner().getId())) {
+        if (postUpdateDto.getOwner().getId() != null && !postUpdateDto.getOwner().getId().equals(post.getOwner().getId())) {
             throw new InvalidOperationException("Owner cannot be changed");
         }
 

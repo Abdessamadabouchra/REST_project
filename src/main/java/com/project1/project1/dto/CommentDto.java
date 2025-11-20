@@ -10,7 +10,7 @@ public class CommentDto {
 
     private UUID id;
     @NotNull(message = "User ID is mandatory")
-    private UUID userId;
+    private UserPreviewDto user;
 
     @NotNull(message = "Post ID is mandatory")
     private UUID postId;
@@ -29,12 +29,12 @@ public class CommentDto {
         return id;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public UserPreviewDto getUser() {
+        return user;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+    public void setUser(UserPreviewDto user) {
+        this.user = user;
     }
 
     public UUID getPostId() {

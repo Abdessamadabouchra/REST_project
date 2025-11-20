@@ -31,4 +31,13 @@ public class CommentSpecification {
             }
             return cb.equal(root.get("post").get("id"), postId);
         };
-}}
+    }
+    public static Specification<Comment> byUser(UUID userId) {
+        return (root, query, cb) -> {
+            if (userId == null) {
+                return null;
+            }
+            return cb.equal(root.get("owner").get("id"), userId);
+        };
+    }
+}

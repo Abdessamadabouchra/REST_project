@@ -23,6 +23,7 @@ public class CommentController {
     @Autowired
     CommentService commentService;
 
+    //get list
  @GetMapping
     public ListResponseDto<CommentDto> getComments(
          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -33,6 +34,7 @@ public class CommentController {
  }
 
 
+ //get comments by post
     @GetMapping("/post/{id}")
     public ListResponseDto<CommentDto> getCommentsByPost(@PathVariable UUID id,
                                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -41,8 +43,24 @@ public class CommentController {
         return commentService.getCommentsByPost(id,startDate,endDate,pageable);
     }
 
+    //get comments by user
+    @GetMapping("/user/{id}")
+    public ListResponseDto<CommentDto> getCommentsByUser(@PathVariable UUID id,
+                                                         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                                         @PageableDefault(sort={"publishedDate"},size = 10) Pageable pageable){
+        return commentService.getCommentsByUser(id,startDate,endDate,pageable);
+    }
+
+    //create comment
     @PostMapping
     public CommentDto createComment(@RequestBody CommentCreateDto commentDto) {
      return commentService.createComment(commentDto);
+    }
+
+    //delete
+    @DeleteMapping("/{id}")
+    public UUID deleteComment(@PathVariable UUID id) {
+       return commentService.deleteComment(id);
     }
 }

@@ -26,6 +26,7 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
+    //get List
     public ListResponseDto<UserPreviewDto> getAllUsers(LocalDate startDateOfBirth,LocalDate endDateOfBirth,LocalDate startRegisterDate,LocalDate endRegisterDate,String country,String state,String city,String timezone,Pageable pageable) {
 
         Specification<User> spec= UserSpecification.filter(startDateOfBirth,endDateOfBirth,startRegisterDate,endRegisterDate,country,state,city,timezone);
@@ -33,10 +34,12 @@ public class UserService {
         return new ListResponseDto<>(userPage);
     }
 
+    //get by id
     public UserFullDto getUserById(UUID id) {
         return userDao.findById(id).map(userMapper::toFullDto).orElseThrow(()-> new ResourceNotFoundException("No user found!"));
     }
 
+    //create user
     public UserFullDto CreateUser(UserFullDto user) {
         if(user.getFirstName()!=null & user.getLastName()!=null & user.getEmail()!=null){
             User u=userMapper.toEntity(user);
@@ -46,6 +49,7 @@ public class UserService {
         }
     }
 
+    //update
     public UserFullDto updateUser(UUID id, UserFullDto userdto) {
         User us=userDao.findById(id).orElseThrow(()-> new ResourceNotFoundException("No user found!"));
         if(userdto.getFirstName()!=null & userdto.getLastName()!=null & userdto.getEmail()!=null){
@@ -60,6 +64,7 @@ public class UserService {
         return userMapper.toFullDto(us);
     }
 
+    //delete
     public UUID deleteUser(UUID id) {
        User us= userDao.findById(id).orElseThrow(()->new ResourceNotFoundException("User does not exist!"));
         userDao.deleteById(id);

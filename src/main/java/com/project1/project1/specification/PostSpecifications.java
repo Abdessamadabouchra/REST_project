@@ -2,6 +2,7 @@ package com.project1.project1.specification;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -13,14 +14,14 @@ import jakarta.persistence.criteria.Predicate;
 
 public class PostSpecifications {
 
-    public static Specification<Post> byTags(Collection<String> tags) {
+    public static Specification<Post> byTags(List<String> tags) {
     return (root, query, cb) -> {
         if (tags == null || tags.isEmpty()) {
             return null; // pas de filtre
         }
         Join<Post, String> tagJoin = root.join("tags");
 
-        CriteriaBuilder.In<String> in = cb.in(cb.lower(tagJoin));
+        CriteriaBuilder.In<String> in = cb.in(cb.lower(tagJoin.as(String.class)));
 
         tags.forEach(t -> in.value(t.toLowerCase()));
 
@@ -35,7 +36,7 @@ public class PostSpecifications {
         if (userId == null) {
             return null; // ne filtre pas
         }
-        return cb.equal(root.get("user").get("id"), userId);
+        return cb.equal(root.get("owner").get("id"), userId);
     };
 }
 
