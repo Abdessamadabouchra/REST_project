@@ -22,7 +22,7 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    private LocalDate publishedDate=LocalDate.now();
+    private LocalDate publishDate=LocalDate.now();
 
 
 
@@ -58,10 +58,10 @@ public Comment(){}
     public void setPost(Post post) {
         this.post = post;
     }
-    public void setPublishedDate() {
-    this.publishedDate = LocalDate.now();
+    public void setPublishDate(LocalDate publishDate) {
+    this.publishDate = publishDate;
     }
-    public LocalDate getPublishedDate() {
-    return publishedDate;
+    public LocalDate getPublishDate() {
+    return publishDate;
     }
 }

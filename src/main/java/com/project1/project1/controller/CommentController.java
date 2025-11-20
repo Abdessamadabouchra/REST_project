@@ -28,18 +28,23 @@ public class CommentController {
     public ListResponseDto<CommentDto> getComments(
          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-         @PageableDefault(sort={"publishedDate"},size = 10) Pageable pageable
+         @PageableDefault(sort={"publishDate"},size = 10) Pageable pageable
  ) {
      return commentService.getAllComments(startDate,endDate,pageable);
  }
 
+    //Get by id
+    @GetMapping("{id}")
+    public Comment getCommentById(@PathVariable UUID id) {
+        return commentService.getCommentById(id);
+    }
 
  //get comments by post
     @GetMapping("/post/{id}")
     public ListResponseDto<CommentDto> getCommentsByPost(@PathVariable UUID id,
                                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                               @PageableDefault(sort={"publishedDate"},size = 10) Pageable pageable){
+                                               @PageableDefault(sort={"publishDate"},size = 10) Pageable pageable){
         return commentService.getCommentsByPost(id,startDate,endDate,pageable);
     }
 
@@ -48,7 +53,7 @@ public class CommentController {
     public ListResponseDto<CommentDto> getCommentsByUser(@PathVariable UUID id,
                                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                                         @PageableDefault(sort={"publishedDate"},size = 10) Pageable pageable){
+                                                         @PageableDefault(sort={"publishDate"},size = 10) Pageable pageable){
         return commentService.getCommentsByUser(id,startDate,endDate,pageable);
     }
 

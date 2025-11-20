@@ -12,6 +12,7 @@ import com.project1.project1.repository.PostDao;
 import com.project1.project1.repository.UserDao;
 import com.project1.project1.specification.PostSpecifications;
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -115,7 +116,7 @@ public ListResponseDto<PostPreviewDto> getPostsByTag(
 
         // Transforme DTO en entity
         Post post = postMapper.toEntity(postCreateDto);
-       //post.setOwner(owner);
+        post.setOwner(owner);
         // Génère le link automatiquement
     String slug = postCreateDto.getText()
                     .toLowerCase()
@@ -131,6 +132,7 @@ public ListResponseDto<PostPreviewDto> getPostsByTag(
     }
 
 //  // ========= UPDATE POST =========
+
     public PostFullDto updatePost(UUID postId, PostFullDto postUpdateDto) {
         // Récupère le post existant
         Post post = postDao.findById(postId)

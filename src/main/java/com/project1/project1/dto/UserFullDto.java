@@ -66,7 +66,6 @@ public class UserFullDto {
         this.lastName = lastName;
     }
 
-
     public String getPicture() {
         return picture;
     }

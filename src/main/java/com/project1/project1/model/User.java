@@ -18,7 +18,6 @@ public class User {
     private String lastName;
     private String email;
     private LocalDate dateOfBirth;
-    //@Column(nullable = false, columnDefinition = "DATE DEFAULT CURRENT_DATE")
     private LocalDate registerDate = LocalDate.now();
     private String phone;
     private String picture;
@@ -36,7 +35,6 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.phone = phone;
         this.picture = picture;
-        this.registerDate=LocalDate.now();
         this.location = location;
     }
 
@@ -93,7 +91,7 @@ public class User {
     }
 
     public void setRegisterDate(LocalDate registerDate) {
-        this.registerDate = LocalDate.now();
+        this.registerDate =registerDate;
     }
 
     public String getPhone() {

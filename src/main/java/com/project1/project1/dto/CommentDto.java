@@ -18,7 +18,7 @@ public class CommentDto {
     @Size(min = 2, max = 500, message = "the message should be between 2 and 500 charachter")
     @NotNull(message = "The message field cannot be null")
     private String message;
-    private LocalDate publishedDate;
+    private LocalDate publishDate;
 
 
     public void setId(UUID id) {
@@ -53,11 +53,11 @@ public class CommentDto {
         this.message = message;
     }
 
-    public void setPublishedDate() {
-        this.publishedDate = LocalDate.now();
+    public void setPublishDate(LocalDate publishDate) {
+        this.publishDate = publishDate;
     }
-    public LocalDate getPublishedDate() {
-        return publishedDate;
+    public LocalDate getPublishDate() {
+        return publishDate;
     }
 
 }

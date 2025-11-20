@@ -4,7 +4,11 @@ import com.project1.project1.dto.CommentDto;
 import com.project1.project1.dto.ListResponseDto;
 import com.project1.project1.dto.mappers.CommentMapper;
 import com.project1.project1.model.Comment;
+import com.project1.project1.model.Post;
+import com.project1.project1.model.User;
 import com.project1.project1.repository.CommentDao;
+import com.project1.project1.repository.PostDao;
+import com.project1.project1.repository.UserDao;
 import com.project1.project1.specification.CommentSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,16 +26,25 @@ public class CommentService {
     private CommentDao commentDao;
     @Autowired
     private CommentMapper commentMapper;
-    @Autowired
-    private PostService postService;
 
+
+    @Autowired
+    private PostDao postDao;
+    @Autowired
+    private UserDao userdao;
+
+
+    //Get list of comments
     public ListResponseDto<CommentDto> getAllComments(LocalDate startDate,LocalDate endDate,Pageable pageable) {
         Specification<Comment> spec= CommentSpecification.filter(startDate,endDate);
         Page<CommentDto> CommentPage= commentDao.findAll(spec,pageable).map(commentMapper::toDto);
 
         return new ListResponseDto<>(CommentPage);
     }
-
+    //Get by id
+    public Comment getCommentById(UUID id) {
+         return commentDao.findById(id).orElseThrow(()->new IllegalArgumentException("Comment Not Found"));
+    }
     //Get Comment by post
     public ListResponseDto<CommentDto> getCommentsByPost(UUID id,LocalDate startDate,LocalDate endDate,Pageable pageable) {
         Specification<Comment> spec= CommentSpecification.byPost(id).and(CommentSpecification.filter(startDate,endDate));
@@ -48,10 +61,14 @@ public class CommentService {
 
     //create
     public CommentDto createComment(CommentCreateDto commentDto) {
-        if(commentDto.getPost()==null & commentDto.getOwner()==null) {
+        if(commentDto.getPost()==null || commentDto.getOwner()==null) {
             throw new IllegalArgumentException("Post Id and User Id must not be null");
         }
+        User owner=userdao.findById(commentDto.getOwner()).orElseThrow(()->new IllegalArgumentException("No User with the given id found!"));
+        Post post=postDao.findById(commentDto.getPost()).orElseThrow(()->new IllegalArgumentException("No Post with the given id found!"));
         Comment c=commentMapper.toEntity(commentDto);
+        c.setOwner(owner);
+        c.setPost(post);
         return commentMapper.toDto(commentDao.save(c)) ;
     }
 

@@ -19,10 +19,12 @@ public interface CommentMapper {
     @Mapping(target="owner",source="owner", qualifiedByName = "mapOwnerIdToUser")
     @Mapping(target="post",source="post", qualifiedByName = "mapPostIdToPost")
     @Mapping(target="id", ignore = true)
+    @Mapping(target = "publishDate", ignore = true)
     Comment toEntity(CommentCreateDto dto);
 
-    @Mapping(target="userId",source="owner.id")
+    @Mapping(target="user",source="owner")
     @Mapping(target="postId",source="post.id")
+    @Mapping(target = "publishDate",source = "publishDate")
     CommentDto toDto(Comment comment);
 
 
