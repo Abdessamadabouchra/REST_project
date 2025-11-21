@@ -48,7 +48,7 @@ public ResponseEntity<ListResponseDto<PostPreviewDto>> getAllPosts(
                 direction = Sort.Direction.DESC
         ) Pageable pageable,
         @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch
-) throws Exception {
+) {
     ListResponseDto<PostPreviewDto> posts = postService.getAllPosts(text, minLikes, maxLikes, publishDateAfter, publishDateBefore, pageable);
 
     // Générer un ETag basé sur le hash de la réponse
