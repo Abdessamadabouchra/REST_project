@@ -30,10 +30,99 @@ public class PostController {
     private PostService postService;
 
     // ================================
-    //        GET ALL POSTS
+    // GET ALL POSTS
     // ================================
     @GetMapping()
-public ResponseEntity<ListResponseDto<PostPreviewDto>> getAllPosts(
+    public ResponseEntity<ListResponseDto<PostPreviewDto>> getAllPosts(
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) Integer minLikes,
+            @RequestParam(required = false) Integer maxLikes,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateAfter,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateBefore,
+            @PageableDefault(page = 0, size = 10, sort = "publishDate", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch) {
+        ListResponseDto<PostPreviewDto> posts = postService.getAllPosts(text, minLikes, maxLikes, publishDateAfter,
+                publishDateBefore, pageable);
+
+        // Générer un ETag basé sur le hash de la réponse
+        String eTag = GenerateEtag.generate(posts);
+        // Vérifier si l'ETag du client correspond
+        if (ifNoneMatch != null && ifNoneMatch.equals(eTag)) {
+
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED)
+                    .eTag(eTag)
+                    .build();
+
+        }
+
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
+                .eTag(eTag)
+                .body(posts);
+    }
+
+    // ================================
+    // GET POST BY ID
+    // ================================
+   @GetMapping("/{postId}")
+public ResponseEntity<PostFullDto> getPostById(
+        @PathVariable UUID postId,
+        @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch
+) {
+    PostFullDto post = postService.getPostById(postId);
+    String eTag = GenerateEtag.generate(post);
+
+    if (ifNoneMatch != null && ifNoneMatch.equals(eTag)) {
+        return ResponseEntity.status(HttpStatus.NOT_MODIFIED)
+                             .eTag(eTag)
+                             .build();
+    }
+
+    return ResponseEntity.ok()
+            .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
+            .eTag(eTag)
+            .body(post);
+}
+
+    // ================================
+    // GET POSTS BY USER
+    // ================================
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ListResponseDto<PostPreviewDto>> getPostsByUser(
+            @PathVariable UUID userId,
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) Integer minLikes,
+            @RequestParam(required = false) Integer maxLikes,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateAfter,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateBefore,
+            @PageableDefault(page = 0, size = 10, sort = "publishDate", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch) {
+
+        ListResponseDto<PostPreviewDto> posts = postService.getPostsByUser(
+                userId, text, minLikes, maxLikes, publishDateAfter, publishDateBefore, pageable);
+
+        // Générer un ETag basé sur le hash de la réponse
+        String eTag = GenerateEtag.generate(posts);
+        if (ifNoneMatch != null && ifNoneMatch.equals(eTag)) {
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED)
+                    .eTag(eTag)
+                    .build();
+
+        }
+
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
+                .eTag(eTag)
+                .body(posts);
+
+    }
+
+    // ================================
+    // GET POSTS BY TAG
+    // ================================
+   @GetMapping("/tags")
+public ResponseEntity<ListResponseDto<PostPreviewDto>> getPostsByTag(
+        @RequestParam List<String> tags,
         @RequestParam(required = false) String text,
         @RequestParam(required = false) Integer minLikes,
         @RequestParam(required = false) Integer maxLikes,
@@ -49,18 +138,16 @@ public ResponseEntity<ListResponseDto<PostPreviewDto>> getAllPosts(
         ) Pageable pageable,
         @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch
 ) {
-    ListResponseDto<PostPreviewDto> posts = postService.getAllPosts(text, minLikes, maxLikes, publishDateAfter, publishDateBefore, pageable);
+    ListResponseDto<PostPreviewDto> posts = postService.getPostsByTag(
+            tags, text, minLikes, maxLikes, publishDateAfter, publishDateBefore, pageable
+    );
 
-    // Générer un ETag basé sur le hash de la réponse
     String eTag = GenerateEtag.generate(posts);
-    System.out.println(eTag);
-    // Vérifier si l'ETag du client correspond
-    if (ifNoneMatch != null && ifNoneMatch.equals(eTag)) {
 
+    if (ifNoneMatch != null && ifNoneMatch.equals(eTag)) {
         return ResponseEntity.status(HttpStatus.NOT_MODIFIED)
                              .eTag(eTag)
                              .build();
-
     }
 
     return ResponseEntity.ok()
@@ -69,62 +156,9 @@ public ResponseEntity<ListResponseDto<PostPreviewDto>> getAllPosts(
             .body(posts);
 }
 
-    // ================================
-    //        GET POST BY ID
-    // ================================
-    @GetMapping("/{postId}")
-    public PostFullDto getPostById(@PathVariable UUID postId) {
-        return postService.getPostById(postId);
-    }
 
     // ================================
-    //        GET POSTS BY USER
-    // ================================
-    @GetMapping("/user/{userId}")
-    public ListResponseDto<PostPreviewDto> getPostsByUser(
-            @PathVariable UUID userId,
-            @RequestParam(required = false) String text,
-            @RequestParam(required = false) Integer minLikes,
-            @RequestParam(required = false) Integer maxLikes,
-            @RequestParam(required = false) 
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateAfter,
-            @RequestParam(required = false) 
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateBefore,
-            @PageableDefault(
-                    page = 0,
-                    size = 10,
-                    sort = "publishDate",
-                    direction = Sort.Direction.DESC
-            ) Pageable pageable
-    ) {
-        return postService.getPostsByUser(userId, text, minLikes, maxLikes, publishDateAfter, publishDateBefore, pageable);
-    }
-
-    // ================================
-    //        GET POSTS BY TAG
-    // ================================
-    @GetMapping("/tags")
-    public ListResponseDto<PostPreviewDto> getPostsByTag(
-            @RequestParam List<String> tags,
-            @RequestParam(required = false) String text,
-            @RequestParam(required = false) Integer minLikes,
-            @RequestParam(required = false) Integer maxLikes,
-            @RequestParam(required = false) 
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateAfter,
-            @RequestParam(required = false) 
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDateBefore,
-            @PageableDefault(
-                    page = 0,
-                    size = 10,
-                    sort = "publishDate",
-                    direction = Sort.Direction.DESC
-            ) Pageable pageable
-    ) {
-        return postService.getPostsByTag(tags, text, minLikes, maxLikes, publishDateAfter, publishDateBefore, pageable);
-    }
-
-    // ================================
-    //          CREATE POST
+    // CREATE POST
     // ================================
     @PostMapping
     public PostFullDto createPost(@RequestBody PostCreateDto postCreateDto) {
@@ -132,18 +166,17 @@ public ResponseEntity<ListResponseDto<PostPreviewDto>> getAllPosts(
     }
 
     // ================================
-    //          UPDATE POST
+    // UPDATE POST
     // ================================
     @PutMapping("/{postId}")
     public PostFullDto updatePost(
             @PathVariable UUID postId,
-            @RequestBody PostFullDto postUpdateDto
-    ) {
+            @RequestBody PostFullDto postUpdateDto) {
         return postService.updatePost(postId, postUpdateDto);
     }
 
     // ================================
-    //          DELETE POST
+    // DELETE POST
     // ================================
     @DeleteMapping("/{postId}")
     public UUID deletePost(@PathVariable UUID postId) {
