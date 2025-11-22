@@ -1,9 +1,6 @@
 package com.project1.project1.controller;
 
-import com.project1.project1.dto.ListResponseDto;
-import com.project1.project1.dto.PostCreateDto;
-import com.project1.project1.dto.PostFullDto;
-import com.project1.project1.dto.PostPreviewDto;
+import com.project1.project1.dto.*;
 import com.project1.project1.services.PostService;
 
 import com.project1.project1.util.GenerateEtag;
@@ -11,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +21,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
-@RequestMapping("/v1/posts")
+@RequestMapping(path = "/v1/posts",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 public class PostController {
 
     @Autowired
@@ -54,7 +56,6 @@ public class PostController {
                     .build();
 
         }
-
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
                 .eTag(eTag)
@@ -65,7 +66,7 @@ public class PostController {
     // GET POST BY ID
     // ================================
    @GetMapping("/{postId}")
-public ResponseEntity<PostFullDto> getPostById(
+public ResponseEntity<EntityModel<PostFullDto>> getPostById(
         @PathVariable UUID postId,
         @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch
 ) {
@@ -77,11 +78,11 @@ public ResponseEntity<PostFullDto> getPostById(
                              .eTag(eTag)
                              .build();
     }
-
+       EntityModel<PostFullDto> resource = toModel(post);
     return ResponseEntity.ok()
             .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
             .eTag(eTag)
-            .body(post);
+            .body(resource);
 }
 
     // ================================
@@ -160,7 +161,7 @@ public ResponseEntity<ListResponseDto<PostPreviewDto>> getPostsByTag(
     // ================================
     // CREATE POST
     // ================================
-    @PostMapping
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public PostFullDto createPost(@RequestBody PostCreateDto postCreateDto) {
         return postService.createPost(postCreateDto);
     }
@@ -168,7 +169,7 @@ public ResponseEntity<ListResponseDto<PostPreviewDto>> getPostsByTag(
     // ================================
     // UPDATE POST
     // ================================
-    @PutMapping("/{postId}")
+    @PutMapping(path="/{postId}",consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public PostFullDto updatePost(
             @PathVariable UUID postId,
             @RequestBody PostFullDto postUpdateDto) {
@@ -182,4 +183,13 @@ public ResponseEntity<ListResponseDto<PostPreviewDto>> getPostsByTag(
     public UUID deletePost(@PathVariable UUID postId) {
         return postService.deletePost(postId);
     }
+
+    public static EntityModel<PostFullDto> toModel(PostFullDto postDto) {
+        return EntityModel.of(postDto,
+                linkTo(methodOn(PostController.class).getPostById(postDto.getId(), null)).withSelfRel(),
+                linkTo(methodOn(UserController.class).getUserById(postDto.getOwner().getId(),null)).withRel("user")
+
+        );}
 }
+
+

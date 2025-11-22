@@ -7,12 +7,15 @@ import com.project1.project1.model.Comment;
 import com.project1.project1.services.CommentService;
 import com.project1.project1.util.GenerateEtag;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +24,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
-@RequestMapping("v1/comments")
+@RequestMapping(path = "v1/comments",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 public class CommentController {
 
     @Autowired
@@ -43,7 +49,6 @@ public class CommentController {
                     .eTag(eTag)
                     .build();
         }
-
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
                 .eTag(eTag)
@@ -51,22 +56,23 @@ public class CommentController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Comment> getCommentById(
+    public ResponseEntity<EntityModel<CommentDto>> getCommentById(
             @PathVariable UUID id,
             @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch) {
-        Comment comment = commentService.getCommentById(id);
-        String eTag = GenerateEtag.generate(comment);
+        CommentDto commentDto = commentService.getCommentById(id);
+        String eTag = GenerateEtag.generate(commentDto);
 
         if (ifNoneMatch != null && ifNoneMatch.equals(eTag)) {
             return ResponseEntity.status(HttpStatus.NOT_MODIFIED)
                     .eTag(eTag)
                     .build();
         }
+        EntityModel<CommentDto> resource = toModel(commentDto);
 
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
                 .eTag(eTag)
-                .body(comment);
+                .body(resource);
     }
 
     // get comments by post
@@ -115,8 +121,8 @@ public class CommentController {
     }
 
     // create comment
-    @PostMapping
-    public CommentDto createComment(@RequestBody CommentCreateDto commentDto) {
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public CommentDto createComment(@RequestBody @Valid CommentCreateDto commentDto) {
         return commentService.createComment(commentDto);
     }
 
@@ -125,4 +131,12 @@ public class CommentController {
     public UUID deleteComment(@PathVariable UUID id) {
         return commentService.deleteComment(id);
     }
+
+    public static EntityModel<CommentDto> toModel(CommentDto commentDto) {
+        return EntityModel.of(commentDto,
+        linkTo(methodOn(CommentController.class).getCommentById(commentDto.getId(), null)).withSelfRel(),
+                linkTo(methodOn(UserController.class).getUserById(commentDto.getUser().getId(),null)).withRel("user"),
+                linkTo(methodOn(PostController.class).getPostById(commentDto.getPostId(),null)).withRel("post")
+        );}
+
 }

@@ -1,6 +1,7 @@
 
 package com.project1.project1.controller;
 import com.project1.project1.dto.ListResponseDto;
+import com.project1.project1.dto.PostFullDto;
 import com.project1.project1.dto.UserFullDto;
 import com.project1.project1.dto.UserPreviewDto;
 import com.project1.project1.services.UserService;
@@ -11,16 +12,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping(path = "/v1/users",produces  = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 public class UserController{
 
     @Autowired
@@ -55,7 +61,6 @@ public ResponseEntity<ListResponseDto<UserPreviewDto>> getUsers(
                              .eTag(eTag)
                              .build();
     }
-
     return ResponseEntity.ok()
             .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
             .eTag(eTag)
@@ -63,8 +68,8 @@ public ResponseEntity<ListResponseDto<UserPreviewDto>> getUsers(
 }
 
 
-    @GetMapping("/{id}")
-public ResponseEntity<UserFullDto> getUserById(
+@GetMapping("/{id}")
+public ResponseEntity<EntityModel<UserFullDto>> getUserById(
         @PathVariable UUID id,
         @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch
 ) {
@@ -76,20 +81,20 @@ public ResponseEntity<UserFullDto> getUserById(
                              .eTag(eTag)
                              .build();
     }
-
+        EntityModel<UserFullDto> resource = toModel(user);
     return ResponseEntity.ok()
             .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
             .eTag(eTag)
-            .body(user);
+            .body(resource);
 }
 
 
-    @PostMapping
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
         public UserFullDto CreateUser(@RequestBody UserFullDto user){
        return userService.CreateUser(user);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}",consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserFullDto updateUser(@PathVariable UUID id,@RequestBody UserFullDto user){
         return userService.updateUser(id,user);
     }
@@ -98,5 +103,12 @@ public ResponseEntity<UserFullDto> getUserById(
     public UUID deleteUser(@PathVariable UUID id){
        return  userService.deleteUser(id);
     }
+
+    public static EntityModel<UserFullDto> toModel(UserFullDto userDto) {
+        return EntityModel.of(userDto,
+                linkTo(methodOn(UserController.class).getUserById(userDto.getId(), null)).withSelfRel(),
+                linkTo(methodOn(PostController.class).getPostsByUser(userDto.getId(), null,null,null,null,null,null,null)).withRel("posts"),
+                linkTo(methodOn(CommentController.class).getCommentsByUser(userDto.getId(),null,null,null,null)).withRel("user")
+        );}
 
 }

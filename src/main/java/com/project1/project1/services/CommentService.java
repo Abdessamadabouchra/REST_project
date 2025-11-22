@@ -42,8 +42,9 @@ public class CommentService {
         return new ListResponseDto<>(CommentPage);
     }
     //Get by id
-    public Comment getCommentById(UUID id) {
-         return commentDao.findById(id).orElseThrow(()->new IllegalArgumentException("Comment Not Found"));
+    public CommentDto getCommentById(UUID id) {
+         Comment comment=commentDao.findById(id).orElseThrow(()->new IllegalArgumentException("Comment Not Found"));
+        return commentMapper.toDto(comment);
     }
     //Get Comment by post
     public ListResponseDto<CommentDto> getCommentsByPost(UUID id,LocalDate startDate,LocalDate endDate,Pageable pageable) {

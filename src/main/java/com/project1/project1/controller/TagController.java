@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -16,13 +17,13 @@ import com.project1.project1.services.TagService;
 import com.project1.project1.util.GenerateEtag;
 
 @RestController
-@RequestMapping("/v1/tags")
+@RequestMapping(path = "/v1/tags",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 public class TagController {
 
     @Autowired
     private TagService tagService;
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<String>> getTags(
             @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch) {
         List<String> tags = tagService.getAllTags();
