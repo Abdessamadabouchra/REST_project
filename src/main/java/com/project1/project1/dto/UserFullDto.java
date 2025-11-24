@@ -3,6 +3,7 @@ package com.project1.project1.dto;
 import com.project1.project1.enums.Title;
 import com.project1.project1.model.Location;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,21 +17,25 @@ import java.util.UUID;
 public class UserFullDto {
 
     private UUID id;
+    @NotNull(message = "{user.notnull.title}")
     private Title title;
 
-    @Size(min = 2,max = 50,message = "First name should be between 2 and 50 character")
-    @NotNull
+    @NotNull(message = "{user.notnull.firstname}")
+    @Size(min=2,max = 50,message = "{user.firstname.size")
     private String firstName;
 
-    @Size(min = 2,max = 50,message = "Last name should be between 2 and 50 character")
-    @NotNull
+    @NotNull(message = "{user.notnull.lastname}")
+    @Size(min=2,max = 50,message = "{user.lastname.size")
     private String lastName;
-   private String email;
+
+    @NotNull(message = "{user.notnull.email}")
+    @Email(message = "{user.notvalid.email}")
+    private String email;
     private LocalDate dateOfBirth;
     private LocalDate registerDate;
     private String phone;
 
-    @URL(message = "Picture must be a valid URL")
+    @URL(message = "{error.image.url}")
     private String picture;
 
     private Location location;

@@ -40,4 +40,16 @@ public class CommentSpecification {
             return cb.equal(root.get("owner").get("id"), userId);
         };
     }
+    public static Specification<Comment> search(String keyword) {
+
+        if (keyword == null || keyword.isBlank()) {
+            return (root, query, cb) -> cb.conjunction();
+        }
+        String value = "%" + keyword.toLowerCase() + "%";
+
+        return (root, query, cb) -> cb.like(
+                cb.lower(root.get("message")),
+                value
+        );
+    }
 }

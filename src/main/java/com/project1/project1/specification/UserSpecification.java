@@ -1,7 +1,10 @@
 package com.project1.project1.specification;
 
 
+import com.project1.project1.model.Post;
 import com.project1.project1.model.User;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -11,7 +14,7 @@ import java.util.List;
 
 
 public class UserSpecification {
-    public static Specification<User> filter(LocalDate startDateOfBirth,LocalDate endDateOfBirth,LocalDate startRegisterDate,LocalDate endRegisterDate,String country,String state,String city,String timezone){
+    public static Specification<User> filter(LocalDate startDateOfBirth, LocalDate endDateOfBirth, LocalDate startRegisterDate, LocalDate endRegisterDate, String country, String state, String city, String timezone) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (country != null) {
@@ -21,26 +24,44 @@ public class UserSpecification {
                 predicates.add(cb.equal(root.get("location").get("state"), state));
             }
             if (city != null) {
-                predicates.add(cb.equal(root.get("location").get("city"),city));
+                predicates.add(cb.equal(root.get("location").get("city"), city));
             }
-            if(timezone!=null){
-                predicates.add(cb.equal(root.get("location").get("timezone"),timezone));
+            if (timezone != null) {
+                predicates.add(cb.equal(root.get("location").get("timezone"), timezone));
             }
 
-            if(startDateOfBirth!=null){
+            if (startDateOfBirth != null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("dateOfBirth"), startDateOfBirth));
             }
-            if(endDateOfBirth!=null){
+            if (endDateOfBirth != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("dateOfBirth"), endDateOfBirth));
             }
-            if(startRegisterDate!=null){
+            if (startRegisterDate != null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("registerDate"), startRegisterDate));
             }
-            if(endRegisterDate!=null){
+            if (endRegisterDate != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("registerDate"), endRegisterDate));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    public static Specification<User> search(String keyword) {
+
+        if (keyword == null || keyword.isBlank()) {
+            return (root, query, cb) -> cb.conjunction();
+        }
+        String value ="%" + keyword.toLowerCase() + "%";
+
+        return (root, query, cb) -> cb.or(
+                cb.like(cb.lower(root.get("firstName")), value),
+                cb.like(cb.lower(root.get("lastName")), value),
+                cb.like(cb.lower(root.get("location").get("country")), value),
+                cb.like(cb.lower(root.get("location").get("street")), value),
+                cb.like(cb.lower(root.get("location").get("city")), value),
+                cb.like(cb.lower(root.get("location").get("state")), value)
+        );
+    }
+
 }

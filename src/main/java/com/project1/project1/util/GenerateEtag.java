@@ -11,7 +11,7 @@ public class GenerateEtag {
 
     private static final ObjectMapper mapper = new ObjectMapper()
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-            .findAndRegisterModules(); // handles Java 8 date/time types
+            .findAndRegisterModules();
 
     /**
      * Generate ETag from object using MD5.

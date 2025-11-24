@@ -6,10 +6,14 @@ import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 public class CommentCreateDto {
-    @Size(min = 6, max = 1000,message = "must be between 6 and 100!")
+    @Size(min = 6, max = 1000,message = "{comment.size}")
+    @NotNull(message = "{comment.notnull.message}")
     private String message;
-    @NotNull(message = "{comment.notnull}")
+
+    @NotNull(message = "{comment.notnull.owner}")
     private UUID owner;
+
+    @NotNull(message = "{comment.notnull.post}")
     private UUID post;
 
     public String getMessage() {

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 import com.project1.project1.model.Post;
 
@@ -90,4 +91,22 @@ public static Specification<Post> byId(UUID postId) {
             return predicate;
         };
     }
+    public static Specification<Post> search(String keyword) {
+
+        if (keyword == null || keyword.isBlank()) {
+            return (root, query, cb) -> cb.conjunction();
+        }
+
+        String value = "%" + keyword.toLowerCase() + "%";
+
+        return (root, query, cb) -> {
+            Join<Post, String> tagsJoin = root.join("tags", JoinType.LEFT);
+
+            return cb.or(
+                    cb.like(cb.lower(root.get("text")), value),
+                    cb.like(cb.lower(tagsJoin), value)
+            );
+        };
+    }
+
 }

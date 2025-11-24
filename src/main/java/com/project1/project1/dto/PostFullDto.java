@@ -13,7 +13,6 @@ public class PostFullDto {
     private String image;
     private int likes;
     private List<String> tags;
-      @Size(min = 6, max = 600)
     private String link;
     private LocalDate publishDate;
     private UserPreviewDto owner;

@@ -8,17 +8,17 @@ import java.util.UUID;
 
 public class PostCreateDto {
 
-    @Size(min = 6, max = 1000)
-    @NotNull
+    @Size(min = 6, max = 1000,message = "{post.text.size}")
+    @NotNull(message = "{post.notnull.text}")
     private String text;
 
-    @URL(message = "Image must be a valid URL")
+    @URL(message = "{error.image.url}")
     private String image;
 
     private int likes;
 
     private List<String> tags;
-
+    @NotNull(message = "{post.notnull.owner}")
     private UUID owner;
 
 

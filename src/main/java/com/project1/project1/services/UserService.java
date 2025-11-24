@@ -27,9 +27,9 @@ public class UserService {
     UserMapper userMapper;
 
     //get List
-    public ListResponseDto<UserPreviewDto> getAllUsers(LocalDate startDateOfBirth,LocalDate endDateOfBirth,LocalDate startRegisterDate,LocalDate endRegisterDate,String country,String state,String city,String timezone,Pageable pageable) {
+    public ListResponseDto<UserPreviewDto> getAllUsers(String keyword,LocalDate startDateOfBirth,LocalDate endDateOfBirth,LocalDate startRegisterDate,LocalDate endRegisterDate,String country,String state,String city,String timezone,Pageable pageable) {
 
-        Specification<User> spec= UserSpecification.filter(startDateOfBirth,endDateOfBirth,startRegisterDate,endRegisterDate,country,state,city,timezone);
+        Specification<User> spec= UserSpecification.search(keyword).and(UserSpecification.filter(startDateOfBirth,endDateOfBirth,startRegisterDate,endRegisterDate,country,state,city,timezone));
         Page<UserPreviewDto> userPage = userDao.findAll(spec ,pageable).map(userMapper::toPreviewDto);
         return new ListResponseDto<>(userPage);
     }

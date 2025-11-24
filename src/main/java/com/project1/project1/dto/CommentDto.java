@@ -9,14 +9,8 @@ import java.util.UUID;
 public class CommentDto {
 
     private UUID id;
-    @NotNull(message = "User ID is mandatory")
     private UserPreviewDto user;
-
-    @NotNull(message = "Post ID is mandatory")
     private UUID postId;
-
-    @Size(min = 2, max = 500, message = "the message should be between 2 and 500 charachter")
-    @NotNull(message = "The message field cannot be null")
     private String message;
     private LocalDate publishDate;
 

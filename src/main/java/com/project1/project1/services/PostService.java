@@ -12,7 +12,6 @@ import com.project1.project1.repository.PostDao;
 import com.project1.project1.repository.UserDao;
 import com.project1.project1.specification.PostSpecifications;
 
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +33,7 @@ public class PostService {
 
 //   ========= GET ALL POSTS =========
     public ListResponseDto<PostPreviewDto> getAllPosts(
+            String keyword,
             String text,
             Integer minLikes,
             Integer maxLikes,
@@ -41,9 +41,10 @@ public class PostService {
             LocalDate publishDateBefore,
             Pageable pageable
     ) {
-        Specification<Post> spec = PostSpecifications.filter(
+        Specification<Post> spec = PostSpecifications.search(keyword).and(
+                PostSpecifications.filter(
                  text, minLikes, maxLikes, publishDateAfter, publishDateBefore
-        );
+        ));
         Page<PostPreviewDto> dtoPage =
                 postDao.findAll(spec, pageable).map(postMapper::toPreviewDto);
 
@@ -64,6 +65,7 @@ public PostFullDto getPostById(UUID postId) {
     // GET LIST BY USER
 
    public ListResponseDto<PostPreviewDto> getPostsByUser(
+           String keyword,
             UUID userId,
             String text,
             Integer minLikes,
@@ -74,10 +76,10 @@ public PostFullDto getPostById(UUID postId) {
     ) {
 
         Specification<Post> spec =
-                PostSpecifications.byUser(userId)
-                        .and(PostSpecifications.filter(
+                PostSpecifications.byUser(userId).and(
+                        PostSpecifications.search(keyword).and(PostSpecifications.filter(
                              text, minLikes, maxLikes, publishDateAfter, publishDateBefore
-                        ));
+                        )));
 
         Page<PostPreviewDto> dtoPage = postDao
                 .findAll(spec, pageable)
@@ -88,6 +90,7 @@ public PostFullDto getPostById(UUID postId) {
 
     // ========= GET POSTS BY TAG =========
 public ListResponseDto<PostPreviewDto> getPostsByTag(
+        String keyword,
         List<String> tags,
         String text,
         Integer minLikes,
@@ -97,10 +100,10 @@ public ListResponseDto<PostPreviewDto> getPostsByTag(
         Pageable pageable
 ) {
     // Combine le filtrage par tag + autres filtres facultatifs
-  Specification<Post> spec = PostSpecifications.byTags(tags)
-        .and(PostSpecifications.filter(
+  Specification<Post> spec = PostSpecifications.byTags(tags).and(
+          PostSpecifications.search(keyword).and(PostSpecifications.filter(
                 text, minLikes, maxLikes, publishDateAfter, publishDateBefore
-        ));
+        )));
 
     Page<PostPreviewDto> dtoPage = postDao.findAll(spec, pageable)
             .map(postMapper::toPreviewDto);
