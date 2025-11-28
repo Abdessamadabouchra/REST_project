@@ -25,7 +25,7 @@ import com.project1.project1.services.TagService;
 import com.project1.project1.util.GenerateEtag;
 
 @RestController
-@RequestMapping(path = "/tags",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },headers = "X-API-VERSION=2")
+@RequestMapping(path = "/api/tags",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },headers = "X-API-VERSION=2")
 @Tag(name = "Tags  V2", description = "Operations related to retrieving available tags used in posts version 2.")
 public class TagControllerV2 {
 

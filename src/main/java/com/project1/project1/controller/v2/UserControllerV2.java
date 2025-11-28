@@ -37,7 +37,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(path = "/users",produces  = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },headers = "X-API-VERSION=2")
+@RequestMapping(path = "/api/users",produces  = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },headers = "X-API-VERSION=2")
 @Tag(name = "Users V2", description = "Operations related to user management, including registration, profile updates, and retrieval version 2.")
 public class UserControllerV2 {
 
