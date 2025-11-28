@@ -25,12 +25,9 @@ public class CompressionFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-
-        // Qualités associées aux algorithmes
         double gzipQ = getQuality(acceptEncoding, "gzip");
         double deflateQ = getQuality(acceptEncoding, "deflate");
 
-        // Aucun algo accepté → pas de compression
         if (gzipQ == 0 && deflateQ == 0) {
             chain.doFilter(request, response);
             return;

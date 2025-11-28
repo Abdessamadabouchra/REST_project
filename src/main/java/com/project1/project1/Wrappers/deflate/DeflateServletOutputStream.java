@@ -29,7 +29,6 @@ public class DeflateServletOutputStream extends ServletOutputStream {
         deflaterOutputStream.close();
     }
 
-    // === Obligatoire Jakarta ===
     @Override
     public boolean isReady() {
         return true;
@@ -37,6 +36,5 @@ public class DeflateServletOutputStream extends ServletOutputStream {
 
     @Override
     public void setWriteListener(WriteListener writeListener) {
-        // sync mode
     }
 }

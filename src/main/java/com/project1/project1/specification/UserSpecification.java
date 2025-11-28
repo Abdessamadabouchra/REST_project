@@ -1,10 +1,7 @@
 package com.project1.project1.specification;
 
 
-import com.project1.project1.model.Post;
 import com.project1.project1.model.User;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

@@ -13,10 +13,6 @@ public class GenerateEtag {
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
             .findAndRegisterModules();
 
-    /**
-     * Generate ETag from object using MD5.
-     * Excludes null fields and ensures consistent serialization.
-     */
     public static String generate(Object object) {
         try {
             String json = mapper.writeValueAsString(object);
@@ -30,3 +26,25 @@ public class GenerateEtag {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

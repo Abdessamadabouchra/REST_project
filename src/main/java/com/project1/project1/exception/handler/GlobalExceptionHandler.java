@@ -23,7 +23,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ErrorResponse(code, message, details);
     }
 
-    // Handle invalid paths
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(
             NoHandlerFoundException ex,
@@ -39,7 +38,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    // Handle DTO validation errors (e.g., @NotNull, @Size)
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -62,7 +60,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    // Custom application exceptions
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResource(ResourceNotFoundException ex) {
         var error = build("RESOURCE_NOT_FOUND", ex.getMessage(), null);
@@ -93,16 +90,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // Fallback for all other exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleFallback(Exception ex) {
-        // Safely get message or fallback to generic text
         String message = ex.getMessage() != null ? ex.getMessage() : "Unexpected error occurred.";
 
         var error = build(
                 "UNEXPECTED_ERROR",
                 message,
-                Collections.singletonList(message) // avoids NullPointerException
+                Collections.singletonList(message)
         );
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);

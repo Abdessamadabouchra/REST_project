@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+
 @Embeddable
 public class Location {
-    @Size(min=5, max=100,message = "Steet should be between 5 and 100 charatcter")
+    @Size(min=5, max=100,message = "{location.street.size}")
     private String street;
-    @Size(min=2, max=30,message = "City should be between 5 and 30 charatcter")
+    @Size(min=2, max=30,message = "{location.city.size}")
     private String city;
-    @Size(min=2, max=30,message = "Steet should be between 5 and 30 charatcter")
+    @Size(min=2, max=30,message ="{location.state.size}")
     private String state;
-    @Size(min=2, max=30,message = "Steet should be between 5 and 30 charatcter")
+    @Size(min=2, max=30,message = "{location.country.size}")
     private String country;
-    @Pattern(regexp = "^[+-](?:2[0-3]|[01][0-9]):[0-5][0-9]$",
-            message = "Timezone must be in the format +HH:MM or -HH:MM")
+    @Pattern(regexp = "^[+-](?:2[0-3]|[01][0-9]):[0-5][0-9]$", message = "{location.timezone.reg}")
     private String timezone;
 
 

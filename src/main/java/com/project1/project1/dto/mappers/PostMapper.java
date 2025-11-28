@@ -20,7 +20,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring",uses=UserMapper.class)
 public interface PostMapper {
 
-    // Création : PostDto -> Post entity
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "publishDate", ignore = true)
     @Mapping(target = "link", ignore = true)
@@ -33,15 +32,12 @@ public interface PostMapper {
         return user;
     }
 
-    // Preview : Post entity -> PostDto
-    @Mapping(source = "owner", target = "owner") // MapStruct va utiliser toUserPreviewDto
+    @Mapping(source = "owner", target = "owner")
     PostPreviewDto toPreviewDto(Post post);
 
-    // Full return : Post entity -> PostResponseDto
-    @Mapping(source = "owner", target = "owner") // MapStruct va utiliser toUserPreviewDto
+    @Mapping(source = "owner", target = "owner")
     PostFullDto toFullDto(Post post);
 
-    // Mapping liste
     List<PostPreviewDto> toDtoList(List<Post> posts);
     List<PostFullDto> toResponseDtoList(List<Post> posts);
 
@@ -49,5 +45,6 @@ public interface PostMapper {
     @Mapping(target = "owner", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "publishDate", ignore = true)
+    @Mapping(target="link",ignore = true)
      void updatePostDto(PostFullDto postFullDto,@MappingTarget Post post);
 }

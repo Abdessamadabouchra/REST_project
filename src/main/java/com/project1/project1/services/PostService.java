@@ -99,7 +99,7 @@ public ListResponseDto<PostPreviewDto> getPostsByTag(
         LocalDate publishDateBefore,
         Pageable pageable
 ) {
-    // Combine le filtrage par tag + autres filtres facultatifs
+
   Specification<Post> spec = PostSpecifications.byTags(tags).and(
           PostSpecifications.search(keyword).and(PostSpecifications.filter(
                 text, minLikes, maxLikes, publishDateAfter, publishDateBefore
@@ -112,46 +112,34 @@ public ListResponseDto<PostPreviewDto> getPostsByTag(
 }
  // ========= CREATE POST =========
     public PostFullDto createPost(PostCreateDto postCreateDto) {
-        // Vérifie que l'utilisateur existe
         User owner = userdao.findById(postCreateDto.getOwner())
                 .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
-
-        // Transforme DTO en entity
         Post post = postMapper.toEntity(postCreateDto);
         post.setOwner(owner);
-        // Génère le link automatiquement
-    String slug = postCreateDto.getText()
+
+        String slug = postCreateDto.getText()
                     .toLowerCase()
-                    .replaceAll("[^a-z0-9]+", "-"); // transforme le texte en slug
-    String uniqueId = UUID.randomUUID().toString().substring(0, 8); // suffixe unique
-    post.setLink(slug + "-" + uniqueId);
+                    .replaceAll("[^a-z0-9]+", "-");
 
-        // Sauvegarde
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+        post.setLink(slug + "-" + uniqueId);
         Post savedPost = postDao.save(post);
-
-        // Retourne le DTO complet
         return postMapper.toFullDto(savedPost);
     }
 
 //  // ========= UPDATE POST =========
 
-    public PostFullDto updatePost(UUID postId, PostFullDto postUpdateDto) {
-        // Récupère le post existant
+    public PostFullDto updatePost(UUID postId, PostFullDto postUpdateDto) {// Récupère le post existant
         Post post = postDao.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
 
-        // Ne pas autoriser la mise à jour de l'owner
+
         if (postUpdateDto.getOwner().getId() != null && !postUpdateDto.getOwner().getId().equals(post.getOwner().getId())) {
             throw new InvalidOperationException("Owner cannot be changed");
         }
 
-        // Map les champs modifiables
         postMapper.updatePostDto(postUpdateDto, post);
-
-        // Sauvegarde
         Post updatedPost = postDao.save(post);
-
-        // Retourne le DTO complet
         return postMapper.toFullDto(updatedPost);
     }
 

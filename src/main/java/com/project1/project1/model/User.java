@@ -2,6 +2,8 @@ package com.project1.project1.model;
 
 import com.project1.project1.enums.Title;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+
 import java.time.LocalDate;
 import java.util.UUID;
 

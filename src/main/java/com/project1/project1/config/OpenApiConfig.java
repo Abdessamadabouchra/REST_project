@@ -15,13 +15,12 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("User Management API")
-                        .description("REST API documentation for User Service")
+                        .title("Social Management API")
+                        .description("REST API documentation for Users")
                         .version("1.0.0")
                 )
                 .servers(List.of(
-                        new Server().url("http://localhost:8080").description("Local environment"),
-                        new Server().url("https://api.company.com").description("Production environment")
+                        new Server().url("http://localhost:8080").description("Local environment")
                 ));
     }
 }

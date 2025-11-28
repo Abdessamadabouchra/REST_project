@@ -29,8 +29,6 @@ public class GZipServletOutputStream extends ServletOutputStream {
         gzipOutputStream.close();
     }
 
-    // === Obligatoire pour Jakarta ===
-
     @Override
     public boolean isReady() {
         return true;
@@ -38,6 +36,5 @@ public class GZipServletOutputStream extends ServletOutputStream {
 
     @Override
     public void setWriteListener(WriteListener writeListener) {
-        // Not implemented (sync mode)
     }
 }
